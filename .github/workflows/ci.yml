@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v5
+      - run: swift --version
+      - run: swift test
+
+  linux:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        swift: ["5.10", "6.0", "latest"]
+    container: swift:${{ matrix.swift }}
+    steps:
+      - uses: actions/checkout@v5
+      - run: swift test
